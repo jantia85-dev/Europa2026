@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Europa 2026 — Juliancho</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--dark:#0F1218;--dark2:#161B24;--dark3:#1E2533;--accent:#E94560;--gold:#F5A623;--blue:#3498DB;--green:#27AE60;--purple:#8E44AD;--teal:#16A085;--white:#F0F2F5;--muted:#8892A4;--border:rgba(255,255,255,0.08);--card:rgba(255,255,255,0.04);--glass:rgba(255,255,255,0.06);--solo:#3498DB;--pareja:#E94560;--familia:#8E44AD;--regreso:#F5A623}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 80% 50% at 20% 20%,rgba(52,152,219,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 80% 80%,rgba(233,69,96,.06) 0%,transparent 60%);pointer-events:none}
+.site-header{position:sticky;top:0;z-index:100;background:rgba(15,18,24,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 20px}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;height:58px}
+.logo{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:900;color:var(--gold);white-space:nowrap}
+.logo span{color:var(--white);font-weight:700}
+.header-dates{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted);background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.header-budget{margin-left:auto;display:flex;align-items:center;gap:8px}
+.budget-pill{font-size:.7rem;font-weight:600;padding:4px 12px;border-radius:20px;white-space:nowrap}
+.budget-pill.spent{background:rgba(233,69,96,.15);color:var(--accent);border:1px solid rgba(233,69,96,.3)}
+.budget-pill.left{background:rgba(39,174,96,.15);color:var(--green);border:1px solid rgba(39,174,96,.3)}
+.hero{position:relative;z-index:1;padding:40px 20px 24px;max-width:1100px;margin:0 auto}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.1;letter-spacing:-.02em}
+.hero-title .accent{color:var(--accent)}.hero-title .gold{color:var(--gold)}
+.hero-sub{margin-top:8px;font-size:.9rem;color:var(--muted);font-weight:300}
+.hero-route{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.route-city{font-family:'DM Mono',monospace;font-size:.68rem;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid}
+.route-city.solo{color:var(--solo);border-color:rgba(52,152,219,.4);background:rgba(52,152,219,.1)}
+.route-city.pareja{color:var(--pareja);border-color:rgba(233,69,96,.4);background:rgba(233,69,96,.1)}
+.route-city.familia{color:var(--familia);border-color:rgba(142,68,173,.4);background:rgba(142,68,173,.1)}
+.route-city.regreso{color:var(--regreso);border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.1)}
+.route-arrow{color:var(--muted);font-size:.7rem}
+.stats-row{position:relative;z-index:1;max-width:1100px;margin:0 auto 24px;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;transition:transform .2s,border-color .2s}
+.stat-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.15)}
+.stat-label{font-size:.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.stat-value{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-top:2px}
+.stat-sub{font-size:.68rem;color:var(--muted);margin-top:1px}
+.tab-nav{position:sticky;top:58px;z-index:90;background:rgba(15,18,24,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+.tab-nav-inner{max-width:1100px;margin:0 auto;display:flex;overflow-x:auto;gap:2px;padding:0 16px;scrollbar-width:none}
+.tab-nav-inner
+/* FILTRO CIUDADES */
+.city-filter {
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin-bottom:20px; padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.city-btn {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:20px; padding:6px 14px;
+  font-size:.75rem; font-weight:600;
+  color:var(--muted); cursor:pointer;
+  transition:all .2s; font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+.city-btn:hover { border-color:rgba(255,255,255,.2); color:var(--white); }
+.city-btn.active { color:var(--dark); background:var(--gold); border-color:var(--gold); }
+.city-btn.solo-c   { }
+.day-card.hidden { display:none; }
+
+::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;background:none;border:none;cursor:pointer;padding:12px 16px;font-size:.78rem;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.tab-btn:hover{color:var(--white)}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.section-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:20px}
+.section-title span{color:var(--gold)}
+.days-grid{display:flex;flex-direction:column;gap:16px}
+.day-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.day-card:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+.day-header{padding:14px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.day-badge{font-family:'DM Mono',monospace;font-size:.65rem;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid;white-space:nowrap}
+.day-title{font-weight:600;font-size:.95rem;flex:1}
+.day-tipo{font-size:.68rem;color:var(--muted)}
+.day-total-badge{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(245,166,35,.12);color:var(--gold);border:1px solid rgba(245,166,35,.3);white-space:nowrap}
+.day-chevron{color:var(--muted);font-size:.8rem;transition:transform .25s}
+.day-card.open .day-chevron{transform:rotate(180deg)}
+.day-body{display:none;padding:0 20px 20px}
+.day-card.open .day-body{display:block;animation:fadeIn .25s ease}
+.day-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.day-grid{grid-template-columns:1fr}}
+.schedule-title,.budget-title,.notes-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:10px}
+.schedule-item{display:flex;gap:10px;margin-bottom:8px}
+.schedule-time{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--gold);min-width:44px;padding-top:1px;font-weight:500}
+.schedule-act{font-size:.82rem;line-height:1.4}
+.budget-paid{background:rgba(39,174,96,.08);border:1px solid rgba(39,174,96,.2);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.budget-paid-title{font-size:.68rem;color:var(--green);font-weight:600;margin-bottom:6px}
+.budget-spend{background:rgba(52,152,219,.06);border:1px solid rgba(52,152,219,.15);border-radius:10px;padding:10px 12px}
+.budget-spend-title{font-size:.68rem;color:var(--blue);font-weight:600;margin-bottom:6px}
+.budget-item{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.budget-item-name{font-size:.78rem;color:var(--muted);flex:1}
+.budget-item-eur{font-family:'DM Mono',monospace;font-size:.78rem;font-weight:600;white-space:nowrap}
+.budget-item-met{font-size:.6rem;font-weight:600;padding:1px 6px;border-radius:8px;white-space:nowrap}
+.met-arq{background:rgba(52,152,219,.15);color:var(--blue)}
+.met-ef{background:rgba(39,174,96,.15);color:var(--green)}
+.day-meta{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+.meta-pill{display:flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:.78rem}
+.meta-pill-label{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600;min-width:40px}
+.meta-pill-text{flex:1;line-height:1.3}
+.day-notes{margin-top:14px}
+.notes-textarea{width:100%;min-height:60px;resize:vertical;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--white);font-family:'DM Sans',sans-serif;font-size:.82rem;line-height:1.5;transition:border-color .2s;outline:none}
+.notes-textarea:focus{border-color:rgba(245,166,35,.4)}
+.notes-textarea::placeholder{color:var(--muted)}
+.day-tip{margin-top:12px;background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:10px;padding:10px 14px;font-size:.78rem;color:rgba(245,166,35,.9);line-height:1.5}
+.day-tip::before{content:'💡 '}
+.saldo-bar{margin-top:14px;background:var(--dark3);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px}
+.saldo-bar-label{font-size:.7rem;color:var(--muted)}
+.saldo-bar-track{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.saldo-bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));border-radius:3px}
+.saldo-bar-num{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--gold);white-space:nowrap}
+.budget-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:28px}
+.bov-card{border-radius:16px;padding:18px 20px;border:1px solid}
+.bov-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:4px}
+.bov-value{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700}
+.bov-sub{font-size:.72rem;margin-top:2px}
+.tracker-title{font-size:1rem;font-weight:600;margin-bottom:12px}
+.tracker-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.tracker-city{font-size:.82rem;flex:1}
+.tracker-budget{font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);min-width:70px;text-align:right}
+.tracker-input-wrap{position:relative}
+.tracker-input{width:90px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:5px 8px 5px 20px;color:var(--white);font-family:'DM Mono',monospace;font-size:.78rem;outline:none;transition:border-color .2s}
+.tracker-input:focus{border-color:var(--gold)}
+.tracker-input-prefix{position:absolute;left:7px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:.78rem;color:var(--muted);pointer-events:none}
+.tracker-diff{font-family:'DM Mono',monospace;font-size:.72rem;min-width:60px;text-align:right}
+.diff-under{color:var(--green)}.diff-over{color:var(--accent)}
+.budget-bar-section{margin-top:24px}
+.seg-bar{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.seg-bar-label{font-size:.78rem;min-width:160px}
+.seg-bar-track{flex:1;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden}
+.seg-bar-fill{height:100%;border-radius:4px}
+.seg-bar-num{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--muted);min-width:60px;text-align:right}
+.checklist-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:640px){.checklist-grid{grid-template-columns:1fr}}
+.checklist-section{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.checklist-sec-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.checklist-sec-title{font-weight:600;font-size:.88rem}
+.checklist-progress{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--muted)}
+.checklist-items{padding:8px 16px 14px;display:flex;flex-direction:column;gap:4px}
+.check-item{display:flex;align-items:flex-start;gap:10px;padding:6px 8px;border-radius:8px;cursor:pointer;transition:background .15s}
+.check-item:hover{background:rgba(255,255,255,.04)}
+.check-box{width:16px;height:16px;border-radius:4px;flex-shrink:0;margin-top:1px;border:1.5px solid var(--muted);background:transparent;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.check-item.checked .check-box{background:var(--green);border-color:var(--green)}
+.check-item.checked .check-box::after{content:'✓';color:white;font-size:.65rem;font-weight:700}
+.check-text{font-size:.8rem;line-height:1.4;flex:1}
+.check-item.checked .check-text{color:var(--muted);text-decoration:line-through}
+.check-item.urgent:not(.checked) .check-text{color:var(--white)}
+.check-item.urgent:not(.checked) .check-box{border-color:var(--accent)}
+.hotels-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.hotel-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;transition:transform .2s,box-shadow .2s}
+.hotel-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.hotel-dates{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--muted);margin-bottom:6px}
+.hotel-name{font-weight:700;font-size:.95rem;margin-bottom:4px}
+.hotel-city{font-size:.78rem;color:var(--muted);margin-bottom:10px}
+.hotel-ref{font-family:'DM Mono',monospace;font-size:.68rem;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.2);color:var(--green);padding:4px 10px;border-radius:8px;display:inline-block;margin-bottom:8px}
+.hotel-status{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;color:var(--green)}
+.hotel-pin{font-size:.72rem;color:var(--muted);margin-top:6px;font-family:'DM Mono',monospace}
+.running-grid{display:flex;flex-direction:column;gap:10px}
+.run-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;transition:transform .2s}
+.run-card:hover{transform:translateX(4px)}
+.run-info{flex:1}
+.run-day{font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:2px}
+.run-route{font-size:.88rem;font-weight:500}
+.run-meta{display:flex;gap:8px;margin-top:4px}
+.run-pill{font-size:.65rem;font-weight:600;padding:2px 8px;border-radius:10px;border:1px solid}
+.run-pill.km{color:var(--teal);border-color:rgba(22,160,133,.4);background:rgba(22,160,133,.1)}
+.run-pill.min{color:var(--blue);border-color:rgba(52,152,219,.4);background:rgba(52,152,219,.1)}
+.run-pill.int{color:var(--gold);border-color:rgba(245,166,35,.4);background:rgba(245,166,35,.1)}
+.run-done-btn{background:none;border:1.5px solid var(--muted);border-radius:8px;padding:6px 12px;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif}
+.run-card.done .run-done-btn{background:var(--green);border-color:var(--green);color:white}
+.run-card.done .run-route{text-decoration:line-through;color:var(--muted)}
+.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.app-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px}
+.app-icon{width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;background:var(--glass);border:1px solid var(--border)}
+.app-name{font-weight:600;font-size:.88rem;margin-bottom:3px}
+.app-desc{font-size:.75rem;color:var(--muted);line-height:1.4}
+.app-badge{display:inline-block;margin-top:6px;font-size:.6rem;font-weight:700;padding:2px 7px;border-radius:8px;text-transform:uppercase;letter-spacing:.05em}
+.app-badge.must{background:rgba(233,69,96,.15);color:var(--accent);border:1px solid rgba(233,69,96,.3)}
+.app-badge.key{background:rgba(52,152,219,.15);color:var(--blue);border:1px solid rgba(52,152,219,.3)}
+.app-badge.nice{background:rgba(39,174,96,.15);color:var(--green);border:1px solid rgba(39,174,96,.3)}
+.ruta-ciudad-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:16px}
+.ruta-ciudad-header{padding:16px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;user-select:none}
+.ruta-ciudad-flag{font-size:1.8rem}
+.ruta-ciudad-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;flex:1}
+.ruta-ciudad-days{font-size:.72rem;color:var(--muted)}
+.ruta-ciudad-chevron{color:var(--muted);transition:transform .25s}
+.ruta-ciudad-card.open .ruta-ciudad-chevron{transform:rotate(180deg)}
+.ruta-ciudad-body{display:none;padding:0 20px 24px}
+.ruta-ciudad-card.open .ruta-ciudad-body{display:block;animation:fadeIn .25s ease}
+.ruta-vibe{font-style:italic;font-size:.85rem;color:var(--muted);border-left:3px solid var(--gold);padding-left:12px;margin-bottom:20px;line-height:1.5}
+.ruta-mapa{display:flex;flex-direction:column;margin-bottom:20px}
+.ruta-stop{display:flex;align-items:flex-start}
+.ruta-stop-left{display:flex;flex-direction:column;align-items:center;width:44px;flex-shrink:0}
+.ruta-stop-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:white;border:2px solid rgba(255,255,255,.2);margin-top:2px}
+.ruta-stop-line{width:2px;flex:1;min-height:24px;background:linear-gradient(to bottom,rgba(255,255,255,.15),rgba(255,255,255,.05));margin:2px 0}
+.ruta-stop:last-child .ruta-stop-line{display:none}
+.ruta-stop-content{flex:1;background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;margin-left:10px}
+.ruta-stop-title{font-weight:700;font-size:.9rem;margin-bottom:4px}
+.ruta-stop-items{display:flex;flex-direction:column;gap:3px}
+.ruta-stop-item{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)}
+.ruta-stop-item-name{flex:1}
+.ruta-stop-item-price{font-family:'DM Mono',monospace;font-size:.7rem;font-weight:600;white-space:nowrap}
+.price-free{color:var(--green)}.price-paid{color:var(--gold)}
+.ruta-stop-transport{display:inline-flex;align-items:center;gap:5px;font-size:.68rem;font-weight:600;padding:3px 10px;border-radius:20px;margin:4px 0 2px 10px;background:rgba(52,152,219,.12);color:var(--blue);border:1px solid rgba(52,152,219,.25)}
+.ruta-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+@media(max-width:480px){.ruta-info-grid{grid-template-columns:1fr}}
+.ruta-info-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.ruta-info-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:6px}
+.ruta-info-val{font-size:.78rem;line-height:1.5}
+
+/* FILTRO CIUDADES */
+.city-filter {
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin-bottom:20px; padding-bottom:16px;
+  border-bottom:1px solid var(--border);
+}
+.city-btn {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:20px; padding:6px 14px;
+  font-size:.75rem; font-weight:600;
+  color:var(--muted); cursor:pointer;
+  transition:all .2s; font-family:'DM Sans',sans-serif;
+  white-space:nowrap;
+}
+.city-btn:hover { border-color:rgba(255,255,255,.2); color:var(--white); }
+.city-btn.active { color:var(--dark); background:var(--gold); border-color:var(--gold); }
+.city-btn.solo-c   { }
+.day-card.hidden { display:none; }
+
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+@media(max-width:480px){.logo{font-size:.95rem}.header-dates{display:none}.stats-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">Europa <span>'26</span></div>
+    <div class="header-dates">21 Jul – 8 Ago · 19 días · 11 ciudades</div>
+    <div class="header-budget">
+      <div class="budget-pill spent" id="hdr-spent">€0 gastado</div>
+      <div class="budget-pill left" id="hdr-left">€350 efectivo</div>
+    </div>
+  </div>
+</header>
+<section class="hero">
+  <div style="max-width:1100px;margin:0 auto">
+    <h1 class="hero-title"><span class="accent">Diario</span> de<br><span class="gold">Viaje</span> Europa</h1>
+    <p class="hero-sub">Juliancho &amp; Victoria · 6 países · Completo, editable, offline</p>
+    <div class="hero-route">
+      <span class="route-city solo">Cali</span><span class="route-arrow">→</span>
+      <span class="route-city solo">Madrid</span><span class="route-arrow">→</span>
+      <span class="route-city solo">Lisboa</span><span class="route-arrow">→</span>
+      <span class="route-city solo">Amsterdam</span><span class="route-arrow">→</span>
+      <span class="route-city pareja">Barcelona</span><span class="route-arrow">→</span>
+      <span class="route-city pareja">París</span><span class="route-arrow">→</span>
+      <span class="route-city familia">Bérgamo</span><span class="route-arrow">·</span>
+      <span class="route-city familia">Venecia</span><span class="route-arrow">·</span>
+      <span class="route-city familia">Milán</span><span class="route-arrow">→</span>
+      <span class="route-city pareja">Florencia</span><span class="route-arrow">→</span>
+      <span class="route-city pareja">Roma</span><span class="route-arrow">→</span>
+      <span class="route-city regreso">Cali</span>
+    </div>
+  </div>
+</section>
+<section class="stats-row">
+  <div class="stat-card"><div class="stat-label">Ya pagado</div><div class="stat-value" style="color:var(--green)">€2,392</div><div class="stat-sub">Vuelos + hoteles + entradas</div></div>
+  <div class="stat-card"><div class="stat-label">ARQ digital</div><div class="stat-value" style="color:var(--blue)">~€938</div><div class="stat-sub">Restaurantes, transport, entradas</div></div>
+  <div class="stat-card"><div class="stat-label">Efectivo</div><div class="stat-value" style="color:var(--gold)">€350</div><div class="stat-sub">Desde Colombia en billetes</div></div>
+  <div class="stat-card"><div class="stat-label">Efectivo restante</div><div class="stat-value" id="stat-restante" style="color:var(--accent)">€350</div><div class="stat-sub">Se actualiza al marcar gastos</div></div>
+  <div class="stat-card"><div class="stat-label">Días</div><div class="stat-value" style="color:var(--purple)">19</div><div class="stat-sub">21 Jul → 8 Ago 2026</div></div>
+  <div class="stat-card"><div class="stat-label">Victoria llega</div><div class="stat-value" style="color:var(--pareja);font-size:1.1rem">30 Jul</div><div class="stat-sub">Barcelona ❤️</div></div>
+</section>
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="switchTab('dias')" id="tab-dias">📅 Días</button>
+    <button class="tab-btn" onclick="switchTab('presupuesto')" id="tab-presupuesto">💶 Presupuesto</button>
+    <button class="tab-btn" onclick="switchTab('checklist')" id="tab-checklist">✅ Checklist</button>
+    <button class="tab-btn" onclick="switchTab('hoteles')" id="tab-hoteles">🏨 Hoteles</button>
+    <button class="tab-btn" onclick="switchTab('running')" id="tab-running">🏃 Running</button>
+    <button class="tab-btn" onclick="switchTab('apps')" id="tab-apps">📱 Apps</button>
+    <button class="tab-btn" onclick="switchTab('rutas')" id="tab-rutas">🗺️ Rutas ciudad</button>
+  </div>
+</nav>
+<main class="main">
+<div class="tab-panel active" id="panel-dias"><div class="city-filter" id="city-filter">
+  <button class="city-btn active" onclick="filterCity('todas')">🌍 Todas</button>
+  <button class="city-btn" onclick="filterCity('Madrid')">🇪🇸 Madrid</button>
+  <button class="city-btn" onclick="filterCity('Lisboa')">🇵🇹 Lisboa</button>
+  <button class="city-btn" onclick="filterCity('Amsterdam')">🇳🇱 Amsterdam</button>
+  <button class="city-btn" onclick="filterCity('Barcelona')">🇪🇸 Barcelona</button>
+  <button class="city-btn" onclick="filterCity('París')">🇫🇷 París</button>
+  <button class="city-btn" onclick="filterCity('Venecia')">🇮🇹 Venecia</button>
+  <button class="city-btn" onclick="filterCity('Milán')">🇮🇹 Milán</button>
+  <button class="city-btn" onclick="filterCity('Roma')">🇮🇹 Roma</button>
+</div><div class="days-grid" id="days-container"></div></div>
+<div class="tab-panel" id="panel-presupuesto">
+  <h2 class="section-title">Presupuesto <span>en tiempo real</span></h2>
+  <div class="budget-overview">
+    <div class="bov-card" style="background:rgba(39,174,96,.06);border-color:rgba(39,174,96,.2)"><div class="bov-label" style="color:var(--green)">Ya pagado</div><div class="bov-value" style="color:var(--green)">€2,392</div><div class="bov-sub" style="color:var(--muted)">Vuelos + hoteles + entradas</div></div>
+    <div class="bov-card" style="background:rgba(52,152,219,.06);border-color:rgba(52,152,219,.2)"><div class="bov-label" style="color:var(--blue)">ARQ digital</div><div class="bov-value" style="color:var(--blue)">~€938</div><div class="bov-sub" style="color:var(--muted)">Llevar cargado en la app</div></div>
+    <div class="bov-card" style="background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.2)"><div class="bov-label" style="color:var(--gold)">Efectivo</div><div class="bov-value" style="color:var(--gold)">€350</div><div class="bov-sub" style="color:var(--muted)">150 billetera + 200 maleta</div></div>
+    <div class="bov-card" style="background:rgba(233,69,96,.06);border-color:rgba(233,69,96,.2)"><div class="bov-label" style="color:var(--accent)">Gastado real</div><div class="bov-value" style="color:var(--accent)" id="bov-gastado">€0</div><div class="bov-sub" style="color:var(--muted)">Actualiza en tracker abajo</div></div>
+  </div>
+  <div class="budget-bar-section">
+    <h3 class="tracker-title">Distribución por segmento</h3>
+    <div class="seg-bar"><div class="seg-bar-label" style="color:var(--solo)">● Solo (22–29 jul)</div><div class="seg-bar-track"><div class="seg-bar-fill" style="width:50%;background:var(--solo)"></div></div><div class="seg-bar-num">~€632</div></div>
+    <div class="seg-bar"><div class="seg-bar-label" style="color:var(--pareja)">● En Pareja</div><div class="seg-bar-track"><div class="seg-bar-fill" style="width:39%;background:var(--pareja)"></div></div><div class="seg-bar-num">~€456</div></div>
+    <div class="seg-bar"><div class="seg-bar-label" style="color:var(--familia)">● Con Familia</div><div class="seg-bar-track"><div class="seg-bar-fill" style="width:11%;background:var(--familia)"></div></div><div class="seg-bar-num">~€229</div></div>
+  </div>
+  <div style="margin-top:28px"><h3 class="tracker-title">Registra tus gastos reales</h3><div id="tracker-rows"></div></div>
+</div>
+<div class="tab-panel" id="panel-checklist"><h2 class="section-title">Checklist <span>pre-viaje</span></h2><div class="checklist-grid" id="checklist-container"></div></div>
+<div class="tab-panel" id="panel-hoteles"><h2 class="section-title">Hoteles <span>confirmados</span></h2><div class="hotels-grid" id="hotels-container"></div></div>
+<div class="tab-panel" id="panel-running"><h2 class="section-title">Rutas de <span>Running</span></h2><p style="color:var(--muted);font-size:.82rem;margin-bottom:20px">Marca cada ruta completada.</p><div class="running-grid" id="running-container"></div></div>
+<div class="tab-panel" id="panel-apps"><h2 class="section-title">Apps <span>esenciales</span></h2><p style="color:var(--muted);font-size:.82rem;margin-bottom:20px">Instalar antes del 21 julio.</p><div class="apps-grid" id="apps-container"></div></div>
+<div class="tab-panel" id="panel-rutas"><h2 class="section-title">Rutas por <span>ciudad</span></h2><p style="color:var(--muted);font-size:.82rem;margin-bottom:24px">Puntos clave, precios y cómo moverte. Toca para expandir.</p><div id="rutas-container"></div></div>
+</main>
+<script>
+const DAYS = [
+  {id:'d01',fecha:'Mar 22 Jul',ciudad:'Madrid',tipo:'SOLO',color:'solo',
+   vuelo:null,running:'Caminata suave 30 min — no correr primer día',
+   horario:[['Noche','Check-in Room Gran Vía + ducha'],['21:00','Puerta del Sol al anochecer'],['21:30','Plaza Mayor — tapas nocturnas'],['22:30','Gran Vía iluminada — primer paseo']],
+   tip:'Come en Mercado de San Miguel o Plaza Mayor. Bocadillo de jamón + caña = €6. Llegada nocturna — Madrid no duerme.',
+   pagado:[['Hotel Room Gran Vía (2 noches)','59']],
+   gastos:[['Tapas Plaza Mayor — 3 pinchos + pan con tomate','18','ef'],['Cañas x4 llegada noche','12','ef'],['Metro aeropuerto T4 → Gran Vía','5','ef'],['Agua + snack hotel','4','ef']],
+   desglose:{desayuno:0,cafe:0,almuerzo:0,cena:18,cervezas:12,transporte:5,extras:4},
+   total:39,saldo:311},
+  {id:'d02',fecha:'Mié 23 Jul',ciudad:'Madrid',tipo:'SOLO',color:'solo',
+   vuelo:null,running:'Parque del Retiro → Puerta de Alcalá → Cibeles (45 min / 6 km)',
+   horario:[['7:00','Running Retiro — fresco y sin gente'],['10:00','Bernabéu exterior sin entrada'],['13:00','Almuerzo menú del día Malasaña'],['17:00','Museo del Prado exterior + Jardines'],['19:00','Cañas Barrio de las Letras'],['21:00','Cena Barrio Letras']],
+   tip:'Malasaña: menús del día €11-13. Letras: cañas con tapa incluida en muchos bares.',
+   pagado:[],
+   gastos:[['Desayuno cafetería: café + tostada con tomate','5','ef'],['3 cafés durante el día','6','ef'],['Metro bono 10 viajes','12','arq'],['Menú del día Malasaña — entrada+plato+bebida','13','arq'],['Cena sentado Barrio Letras','15','arq'],['Caña+tapa 17h + cañas x4 noche + última caña','23','ef']],
+   desglose:{desayuno:5,cafe:6,almuerzo:13,cena:15,cervezas:23,transporte:12,extras:0},
+   total:74,saldo:237},
+  {id:'d03',fecha:'Jue 24 Jul',ciudad:'Madrid',tipo:'SOLO',color:'solo',
+   vuelo:'MAD→LIS | Iberia | 15:40–16:05 | Directo 1h25m | ✅ Pagado',
+   running:'Madrid Río / Casa de Campo (50 min / 7 km) — mañana temprano',
+   horario:[['7:00','Running Madrid Río'],['9:30','Churros + chocolate San Ginés ☕'],['10:30','Palacio Real exterior + Plaza de Oriente'],['12:30','Almuerzo rápido + hotel'],['13:30','Metro → aeropuerto'],['16:05','Llegada Lisboa'],['19:00','Cena Lisboa — primera noche portuguesa']],
+   tip:'San Ginés desde 1894. En Lisboa pide bacalhau o prego en la primera tasca.',
+   pagado:[['Vuelo MAD→LIS (incluido Iberia)','0'],['Hotel Lisboa Home Hostel (2 noches)','107']],
+   gastos:[['Churros con chocolate San Ginés','5','ef'],['Cafés x3 (mañana + post churros + llegada LIS)','5','ef'],['Almuerzo rápido antes del vuelo','10','arq'],['Metro aeropuerto Madrid + bus aeropuerto Lisboa','7','ef'],['Cena Lisboa — bacalhau o prego en tasca','13','arq'],['Cerveza Sagres con la cena','3','ef']],
+   desglose:{desayuno:5,cafe:5,almuerzo:10,cena:13,cervezas:3,transporte:7,extras:0},
+   total:43,saldo:194},
+  {id:'d04',fecha:'Vie 25 Jul',ciudad:'Lisboa',tipo:'SOLO',color:'solo',
+   vuelo:null,running:'Ribera del Tajo → Torre de Belém (40 min / 5.5 km)',
+   horario:[['7:00','Running ribera del Tajo'],['9:30','Pastéis de Belém — originales desde 1837'],['10:30','Torre de Belém + Monasterio dos Jerónimos'],['13:00','Tren Cascais 🏖 (40 min, €3)'],['14:00','Playa Cascais — Praia da Rainha'],['17:30','Regreso Lisboa'],['19:00','Alfama al atardecer'],['20:30','Cena bacalhau tasca']],
+   tip:'Tren Cascais cada 20 min desde Cais do Sodré (~€3 ida). Rainha más tranquila que Guincho.',
+   pagado:[],
+   gastos:[['Pastel de nata x3 + bica Belém','4','ef'],['Bica media mañana + bica tarde Alfama','3','ef'],['Almuerzo Cascais — pescado fresco + bebida','14','arq'],['Tren Cascais ida + vuelta','6','ef'],['Cena tasca Alfama — bacalhau à Brás','14','arq'],['Sagres x2 cena + Sagres x3 noche Bairro Alto','14','ef'],['Helado playa + agua 1.5L','5','ef']],
+   desglose:{desayuno:4,cafe:3,almuerzo:14,cena:14,cervezas:14,transporte:6,extras:5},
+   total:60,saldo:134},
+  {id:'d05',fecha:'Sáb 26 Jul',ciudad:'Lisboa',tipo:'SOLO',color:'solo',
+   vuelo:'LIS→AMS | TAP | 14:40–18:40 | Directo 3h | ✅ Pagado (€146)',
+   running:'Miradouros: S.Pedro → Graça → S.Jorge (50 min / 6 km)',
+   horario:[['7:00','Running miradores Lisboa'],['9:00','Desayuno pastelería Bairro Alto'],['10:00','Alfama + Castillo São Jorge'],['11:30','Hotel + maleta'],['12:00','Uber aeropuerto Lisboa'],['18:40','Llegada Amsterdam — luz hasta las 22h'],['20:00','Primer canal + cerveza holandesa']],
+   tip:'Aeropuerto LIS a 20 min del centro. Amsterdam julio: luz hasta las 22h.',
+   pagado:[['Vuelo LIS→AMS TAP','146'],['Hotel Tourist Inn Amsterdam (2 noches)','111']],
+   gastos:[['Bica + pastel de nata Bairro Alto','3','ef'],['Café media mañana','2','ef'],['Sándwich aeropuerto + snack vuelo','13','arq'],['Uber aeropuerto Lisboa','15','arq'],['Tren Schiphol → Amsterdam Centraal','6','ef'],['Heineken x1 terraza llegada + snack','5','ef']],
+   desglose:{desayuno:3,cafe:2,almuerzo:13,cena:0,cervezas:5,transporte:21,extras:0},
+   total:44,saldo:90},
+  {id:'d06',fecha:'Dom 27 Jul',ciudad:'Amsterdam',tipo:'SOLO',color:'solo',
+   vuelo:null,running:'Vondelpark → Museumplein → Jordaan (50 min / 7 km)',
+   horario:[['7:00','Running Vondelpark + Museumplein vacío'],['9:30','Rijksmuseum (mín 2h)'],['12:00','Almuerzo Jordaan — bitterballen + cervezas'],['14:00','Bici MacBike canales'],['16:30','De Wallen — fenómeno único de día'],['18:30','Brouwerij t IJ — cervecería en molino 🍺'],['20:30','Cena canal Leidseplein']],
+   tip:'De Wallen de día: fascinante, único en el mundo. Brouwerij t IJ: cerveza artesanal en molino real. MacBike ~€14.',
+   pagado:[['Rijksmuseum (reservar online)','22']],
+   gastos:[['Desayuno cafetería holandesa — huevos + café','9','arq'],['Cafés x2 media mañana + museo','6','ef'],['Rijksmuseum entrada','22','arq'],['Bici MacBike día completo','14','arq'],['Almuerzo Jordaan — bitterballen x6 + 2 Heineken','14','ef'],['Heineken x1 terraza canal tarde','5','ef'],['Brouwerij t IJ — cerveza artesanal x4 en molino','20','ef'],['Cena canal Jordaan','18','arq']],
+   desglose:{desayuno:9,cafe:6,almuerzo:14,cena:18,cervezas:25,transporte:14,extras:22},
+   total:108,saldo:-18},
+  {id:'d07',fecha:'Lun 28 Jul',ciudad:'Amsterdam',tipo:'SOLO',color:'solo',
+   vuelo:'AMS→BCN | KLM | 16:45–18:50 | Directo 2h05m | ✅ Pagado',
+   running:'Canales históricos + Plantage (45 min / 6 km) — madrugada mágica',
+   horario:[['7:00','Running canales históricos — amanecer'],['9:00','Desayuno pannenkoeken'],['10:30','Albert Cuypmarkt — el mayor mercado de Holanda'],['14:00','Tren Schiphol → aeropuerto'],['18:50','Llegada Barcelona'],['20:30','Cena Barcelona llegada']],
+   tip:'Tren Schiphol cada 10 min desde Centraal (~€6). BCN julio muy caluroso.',
+   pagado:[['Vuelo AMS→BCN KLM','0'],['Hotel Unite Hostel BCN (solo 28-30)','82']],
+   gastos:[['Desayuno pannenkoeken (crepes holandesas)','9','arq'],['Cafés x2 mañana','4','ef'],['Albert Cuypmarkt stroopwafels + snacks','6','ef'],['Tren Centraal → Schiphol + metro BCN','12','ef'],['Cena Barcelona llegada — tapas o menú','14','arq']],
+   desglose:{desayuno:9,cafe:4,almuerzo:6,cena:14,cervezas:0,transporte:12,extras:0},
+   total:45,saldo:-18},
+  {id:'d08',fecha:'Mar 29 Jul',ciudad:'Barcelona',tipo:'SOLO',color:'solo',
+   vuelo:null,running:'Litoral: Puerto Olímpico → Barceloneta (40 min / 5.5 km)',
+   horario:[['6:45','Running litoral — salida del sol Mediterráneo'],['9:00','Pan con tomate + jamón Barceloneta 🍅'],['10:30','Sagrada Família (ya reservada)'],['13:00','Pausa calor / siesta'],['15:00','Playa Barceloneta 🏖'],['19:00','Barrio Gótico'],['21:00','Cena tapas Born / Gótico']],
+   tip:'Sagrada Família: monumento más visitado de España. Paella en Barceloneta: busca calles interiores.',
+   pagado:[['Sagrada Família (ya reservada)','26']],
+   gastos:[['Café mañana running','2','ef'],['Pan con tomate + jamón desayuno Barceloneta','7','ef'],['Cafés x2 durante el día','4','ef'],['Metro L2 → Sagrada + vuelta','4','ef'],['Almuerzo Barceloneta — arròs o plato del día','14','arq'],['Cerveza Estrella x2 playa tarde','7','ef'],['Helado artesanal + agua playa','5','ef'],['Cena tapas Born / Gótico','15','arq'],['Cerveza Estrella x4 noche Gótico','14','ef']],
+   desglose:{desayuno:7,cafe:6,almuerzo:14,cena:15,cervezas:21,transporte:4,extras:5},
+   total:72,saldo:-90},
+  {id:'d09',fecha:'Mié 30 Jul',ciudad:'Barcelona',tipo:'PAREJA',color:'pareja',
+   vuelo:null,running:'Montjuïc subida corriendo (45 min / 5 km) — mañana solo',
+   horario:[['7:00','Running subida Montjuïc (solo)'],['10:00','Park Güell (zona monumental ~€10)'],['13:00','Almuerzo Eixample'],['17:00','¡Llega Victoria! ❤️'],['20:00','Cena El Nacional Pg. de Gràcia'],['22:30','Copa rooftop Eixample']],
+   tip:'Park Güell: reservar online obligatorio. El Nacional: primera noche en pareja, ideal.',
+   pagado:[['Hotel Unite Hostel BCN (pareja 30-31, 50%)','41']],
+   gastos:[['Café mañana antes Park Güell','2','ef'],['Park Güell entrada (tu parte)','10','arq'],['Cafés x2 con Victoria tarde','5','ef'],['Metro día x2','5','ef'],['Almuerzo Eixample pareja','14','arq'],['Cena El Nacional primera noche pareja','35','arq'],['Copa rooftop Eixample','10','arq']],
+   desglose:{desayuno:0,cafe:7,almuerzo:14,cena:35,cervezas:0,transporte:5,extras:10},
+   total:81,saldo:-98},
+  {id:'d10',fecha:'Jue 31 Jul',ciudad:'Barcelona',tipo:'PAREJA',color:'pareja',
+   vuelo:'BCN→ORY | Transavia | 13:00–14:50 | 2 viajeros | ✅ Pagado',
+   running:'Litoral rápido 30 min — último run Barcelona',
+   horario:[['7:00','Running litoral — último run Barcelona'],['9:00','Desayuno + checkout'],['10:30','Metro L9 → aeropuerto El Prat'],['14:50','Llegada París Orly'],['15:30','RER B + Orlyval → París centro'],['17:00','Check-in Ibis Tour Eiffel'],['19:00','Île de la Cité + Notre Dame noche'],['21:00','Cena Le Marais']],
+   tip:'RER B + Orlyval ~€13, 35 min. Le Marais: primera cena en París, íntimo y auténtico.',
+   pagado:[['Vuelo BCN→ORY Transavia (2 pax)','80'],['Hotel Ibis Tour Eiffel (2 noches, 50%)','104']],
+   gastos:[['Café mañana checkout','2','ef'],['Desayuno + checkout hotel','10','arq'],['Metro L9 aeropuerto El Prat x2','11','ef'],['Café aeropuerto BCN','2','ef'],['RER B + Orlyval Orly → París x2','26','arq'],['Café llegada París','2','ef'],['Cena Le Marais primera noche París','30','arq'],['Copa vino Le Marais noche','10','arq']],
+   desglose:{desayuno:10,cafe:6,almuerzo:0,cena:30,cervezas:0,transporte:37,extras:10},
+   total:93,saldo:-115},
+  {id:'d11',fecha:'Vie 1 Ago',ciudad:'París',tipo:'PAREJA',color:'pareja',
+   vuelo:null,running:'Tullerías → Sena → Champs → Arc de Triomphe (55 min / 8 km)',
+   horario:[['6:30','Running Tullerías → Sena → Champs → Arc'],['9:30','Croissant + café au lait brasserie x2'],['14:30','Louvre ✅ entrada reservada 2:30pm'],['17:30','Picnic Champ de Mars 🧀🍷'],['20:00','Crucero Sena ✅'],['21:30','Torre Eiffel destella ✨'],['22:00','Copa Montmartre']],
+   tip:'Louvre: Richelieu + Denon mínimo 2.5h. Picnic: pan+queso+vino Monoprix ~€12. Torre Eiffel destella 5 min cada hora.',
+   pagado:[['Louvre entrada + audioguía (2 pax)','28'],['Crucero Sena (2 pax)','28']],
+   gastos:[['Café au lait running mañana','2','ef'],['Croissant + café brasserie x2 desayuno','10','ef'],['Metro Ligne x2 día','9','ef'],['Agua x2 durante el día','4','ef'],['Almuerzo zona Louvre / Tullerías pareja','25','arq'],['Cafés x2 tarde','5','ef'],['Pan + queso + vino Monoprix picnic Champ de Mars','12','ef'],['Fruta + extras picnic','4','ef'],['Copa Montmartre cierre noche','16','arq']],
+   desglose:{desayuno:10,cafe:7,almuerzo:25,cena:0,cervezas:0,transporte:9,extras:32},
+   total:87,saldo:-128},
+  {id:'d12',fecha:'Sáb 2 Ago',ciudad:'París',tipo:'FAMILIA',color:'familia',
+   vuelo:'ORY→MXP | Transavia | 16:05–17:40 | 2 viajeros | ✅ Pagado',
+   running:'Jardín du Luxembourg (45 min / 6 km) — último run París',
+   horario:[['7:00','Running Jardín du Luxembourg'],['9:00','Montmartre + Sacré-Cœur'],['11:30','Check-out + almuerzo rápido'],['13:30','RER B → Orly'],['17:40','Llegada Milán Malpensa'],['18:30','Tren → Bérgamo'],['19:30','¡Familia Victoria! 🇮🇹'],['21:00','Aperitivo Città Alta']],
+   tip:'Bérgamo Città Alta: ciudad medieval amurallada en colina. Aperitivo con prosecco local.',
+   pagado:[['Vuelo ORY→MXP Transavia (2 pax)','90'],['Casa familia Victoria (gratis)','0']],
+   gastos:[['Café mañana Montmartre','2','ef'],['Desayuno + checkout Ibis Tour Eiffel','12','arq'],['Café Sacré-Cœur zona','2','ef'],['RER B + Orlyval → Orly x2','26','arq'],['Agua + snack aeropuerto Orly','5','arq'],['Tren Malpensa → Bérgamo x2','14','arq'],['Aperitivo Città Alta — prosecco x2 con familia','10','ef']],
+   desglose:{desayuno:12,cafe:4,almuerzo:0,cena:0,cervezas:0,transporte:53,extras:0},
+   total:69,saldo:-142},
+  {id:'d13',fecha:'Dom 3 Ago',ciudad:'Venecia',tipo:'FAMILIA',color:'familia',
+   vuelo:null,running:'No correr — caminarás 20.000+ pasos en Venecia',
+   horario:[['7:00','Tren Bérgamo → Venecia (~2.5h)'],['10:00','Piazza San Marco — llegar temprano'],['11:00','Basílica San Marcos'],['12:30','Góndola canales menores 🚣'],['14:00','Cicchetti almuerzo bacaro'],['16:00','Rialto + puente'],['18:00','Regreso tren → Bérgamo'],['20:30','Cena en familia']],
+   tip:'Venecia agosto: llegar antes 10am. Cicchetti €1.50 c/u. Agua €3 tienda, €5 restaurante.',
+   pagado:[],
+   gastos:[['Tren Bérgamo → Venecia x2','16','arq'],['Café veneciano mañana (pie de barra)','2','ef'],['Basílica San Marcos entrada x2','6','ef'],['Cicchetti bacaro almuerzo — 8 piezas x2','14','ef'],['Vino/Spritz con cicchetti','5','ef'],['Góndola canales menores (tu parte)','50','arq'],['Gelato Venecia x2','6','ef'],['Agua 1.5L (cara en Venecia)','3','ef'],['Birra tarde canal','5','ef'],['Tren Venecia → Bérgamo x2','14','arq']],
+   desglose:{desayuno:0,cafe:2,almuerzo:19,cena:0,cervezas:5,transporte:30,extras:65},
+   total:121,saldo:-263},
+  {id:'d14',fecha:'Lun 4 Ago',ciudad:'Milán',tipo:'FAMILIA',color:'familia',
+   vuelo:null,running:'Parco Sempione junto al Castello (35 min / 5 km)',
+   horario:[['7:00','Running Parco Sempione'],['9:30','Tren Bérgamo → Milán'],['10:30','Duomo + terraza'],['12:00','Galleria Vittorio Emanuele II'],['13:00','Almuerzo risotto'],['15:00','Navigli canales'],['17:00','Aperitivo Navigli Campari 🍹'],['19:30','Tren → Bérgamo + cena familia']],
+   tip:'Navigli aperitivo: Campari Spritz ~€7 incluye buffet antipasti gratis.',
+   pagado:[],
+   gastos:[['Caffè espresso bar milanés (pie de barra)','1','ef'],['Cafés x2 media mañana + Navigli tarde','5','ef'],['Tren Bérgamo → Milán x2','8','arq'],['Duomo terraza subida x2 (tu parte)','16','arq'],['Almuerzo risotto alla milanese + agua','18','arq'],['Campari Spritz x2 aperitivo Navigli + buffet','14','ef'],['Cena despedida familia Bérgamo','10','ef'],['Tren Milán → Bérgamo x2','8','arq']],
+   desglose:{desayuno:0,cafe:6,almuerzo:18,cena:10,cervezas:14,transporte:16,extras:16},
+   total:80,saldo:-279},
+  {id:'d15',fecha:'Mar 5 Ago',ciudad:'Roma',tipo:'PAREJA',color:'pareja',
+   vuelo:null,running:'No correr — día de trenes y caminar Florencia',
+   horario:[['8:00','Tren Bérgamo/Milán → Florencia (~2h)'],['11:00','Duomo di Firenze exterior'],['12:00','Piazzale Michelangelo — vistas panorámicas'],['13:00','Lampredotto callejero — almuerzo local'],['14:30','Ponte Vecchio + Oltrarno'],['16:30','Tren Florencia → Roma (~1.5h)'],['19:00','Llegada Roma Termini'],['20:30','Cena Trastevere 🍝']],
+   tip:'Florencia en 3-4h: Duomo + Piazzale + Ponte Vecchio. Trastevere: mesa en la calle.',
+   pagado:[['Hotel Virginia Roma (2 noches, 50%)','68']],
+   gastos:[['Café mañana despedida Bérgamo','2','ef'],['Tren Bérgamo/Milán → Florencia x2','35','arq'],['Café llegada Florencia (pie de barra)','1','ef'],['Lampredotto callejero Florencia — almuerzo local','5','ef'],['Gelato Ponte Vecchio x2','6','ef'],['Agua Florencia','2','ef'],['Café tarde Florencia','2','ef'],['Tren Florencia → Roma x2','40','arq'],['Metro Roma Termini → hotel','3','ef'],['Cena Trastevere + copa vino','48','arq']],
+   desglose:{desayuno:0,cafe:5,almuerzo:5,cena:48,cervezas:0,transporte:75,extras:8},
+   total:141,saldo:-420},
+  {id:'d16',fecha:'Mié 6 Ago',ciudad:'Roma',tipo:'PAREJA',color:'pareja',
+   vuelo:null,running:'Villa Borghese → Pincio → vista Vaticano (55 min / 7 km)',
+   horario:[['6:30','Running Villa Borghese → Pincio'],['9:00','Coliseo + Foro Romano (reservar online)'],['12:00','Palatino y Circo Máximo'],['13:30','Almuerzo Testaccio'],['15:30','Vaticano: Plaza San Pedro + Basílica gratis'],['18:00','Fontana di Trevi 🪙'],['20:00','Cena especial Trastevere'],['22:00','Piazza Navona noche']],
+   tip:'Coliseo SE AGOTA — reservar 2-3 semanas antes. Fontana di Trevi: ir de madrugada para fotos.',
+   pagado:[['Coliseo + Foro Romano (2 pax, 50%)','16']],
+   gastos:[['Cornetto + caffè bar romano x2 (pie de barra)','4','ef'],['Caffè espresso x2 durante el día','4','ef'],['Metro Línea B + A día x2','6','ef'],['Almuerzo Testaccio — cacio e pepe romano','22','arq'],['Moneda Fontana di Trevi x2','2','ef'],['Gelato Piazza Navona x2','6','ef'],['Birra Piazza Navona x2 noche','8','ef'],['Cena especial Trastevere con Victoria','70','arq']],
+   desglose:{desayuno:4,cafe:4,almuerzo:22,cena:70,cervezas:8,transporte:6,extras:8},
+   total:122,saldo:-542},
+  {id:'d17',fecha:'Jue 7 Ago',ciudad:'Madrid',tipo:'PAREJA',color:'pareja',
+   vuelo:'FCO→MAD | Iberia IB0650 | 14:45–17:20 | ✅ Pagado',
+   running:'Circo Máximo al amanecer — última carrera europea (40 min / 5.5 km) 🏁',
+   horario:[['7:00','Running Circo Máximo al amanecer — última carrera 🏁'],['9:00','Último cornetto + cappuccino romano'],['10:00','Piazza di Spagna o Borghese'],['11:30','Check-out + Leonardo Express → Fiumicino'],['14:45','Vuelo FCO→MAD'],['17:30','Llegada Madrid'],['20:00','Cena tapas La Latina'],['22:00','Copa azotea Malasaña 🥂']],
+   tip:'Leonardo Express: €14, 32 min, sale cada 30 min. La Latina: mejores tapas de Madrid.',
+   pagado:[['Vuelo FCO→MAD Iberia (incluido)','0'],['Hotel Room Gran Vía Madrid (50%)','66']],
+   gastos:[['Último cornetto + caffè romano x2','4','ef'],['Caffè mañana zona hotel','2','ef'],['Leonardo Express Roma Termini → Fiumicino','14','arq'],['Agua + snack aeropuerto FCO','6','arq'],['Café aeropuerto FCO','3','arq'],['Cena tapas La Latina Madrid','30','arq'],['Copa azotea Malasaña','18','arq'],['Souvenir / detalle para Colombia','15','ef']],
+   desglose:{desayuno:4,cafe:5,almuerzo:0,cena:30,cervezas:0,transporte:23,extras:15},
+   total:77,saldo:-557},
+  {id:'d18',fecha:'Vie 8 Ago',ciudad:'Madrid',tipo:'REGRESO',color:'regreso',
+   vuelo:'MAD→CLO | Iberia | ✅ Pagado (incluido billete)',
+   running:'No correr — ¡a descansar! Europa 2026 completada 🎉',
+   horario:[['Mañana','Check-out + desayuno hotel'],['','Metro Línea 8 → Barajas T4'],['','Check-in + seguridad + duty free'],['','Vuelo Madrid → Cali ✈'],['','¡Bienvenido a casa! 🎉']],
+   tip:'Guarda €20-30 para el aeropuerto. Aduana: declara si traes más de USD $1,500.',
+   pagado:[['Vuelo MAD→CLO (incluido)','0']],
+   gastos:[['Desayuno aeropuerto Barajas','10','arq'],['Cafés x2 aeropuerto','5','ef'],['Metro hotel → Barajas T4','5','ef']],
+   desglose:{desayuno:10,cafe:5,almuerzo:0,cena:0,cervezas:0,transporte:5,extras:0},
+   total:20,saldo:-577},
+];;
+
+const CHECKLIST = [
+  {titulo:'Transporte',color:'var(--blue)', items:[
+    {txt:'Vuelo CLO→MAD (21 jul) — Iberia — CONFIRMADO',done:true},
+    {txt:'Vuelo MAD→LIS (24 jul) — incluido Iberia',done:true},
+    {txt:'Vuelo LIS→AMS (26 jul, TAP) — PAGADO',done:true},
+    {txt:'Vuelo AMS→BCN (28 jul, KLM) — PAGADO',done:true},
+    {txt:'Vuelo BCN→ORY (31 jul, Transavia) — PAGADO',done:true},
+    {txt:'Vuelo ORY→MXP (2 ago, Transavia) — PAGADO',done:true},
+    {txt:'Tren MXP → Bérgamo (2 ago) — comprar en destino',done:false,urgent:true},
+    {txt:'Trenes Bérgamo ↔ Venecia (3 ago)',done:false},
+    {txt:'Trenes Bérgamo ↔ Milán (4 ago)',done:false},
+    {txt:'Trenes Bérgamo → Florencia → Roma (5 ago)',done:false},
+    {txt:'Vuelo FCO→MAD (7 ago, Iberia) — CONFIRMADO',done:true},
+    {txt:'Vuelo MAD→CLO (8 ago, Iberia) — CONFIRMADO',done:true},
+  ]},
+  {titulo:'Hoteles confirmados',color:'var(--green)', items:[
+    {txt:'Room Gran Vía Madrid 22-24 jul — #5528992531',done:true},
+    {txt:'Home Lisbon Hostel 24-26 jul — CONFIRMADO',done:true},
+    {txt:'Tourist Inn Amsterdam 26-28 jul — CONFIRMADO',done:true},
+    {txt:'Unite Hostel BCN 28-30 jul (solo) — #6504627200',done:true},
+    {txt:'Unite Hostel BCN 30-31 jul (pareja) — #5277741313',done:true},
+    {txt:'Ibis Tour Eiffel París 31jul-2ago — #6587905774',done:true},
+    {txt:'Casa familia Victoria — Bérgamo 2-4 ago',done:true},
+    {txt:'Hotel Virginia Roma 5-7 ago — #6935800658',done:true},
+    {txt:'Room Gran Vía Madrid 7-8 ago — #5528992531',done:true},
+  ]},
+  {titulo:'Entradas — Reservar online',color:'var(--accent)', items:[
+    {txt:'Louvre París 1-ago 14:30h — #01444369 PAGADO',done:true},
+    {txt:'Crucero Sena 1-ago — BK605048484887628 PAGADO',done:true},
+    {txt:'Sagrada Família BCN 29-jul — YA RESERVADA',done:true},
+    {txt:'Rijksmuseum Amsterdam 27-jul — RESERVAR ONLINE',done:false,urgent:true},
+    {txt:'Coliseo + Foro Romano 6-ago — RESERVAR YA (se agota)',done:false,urgent:true},
+    {txt:'Park Güell BCN 30-jul — reservar online (~€10)',done:false,urgent:true},
+  ]},
+  {titulo:'Finanzas',color:'var(--gold)', items:[
+    {txt:'Comprar 350 EUR en casa de cambio Cali (no aeropuerto)',done:false,urgent:true},
+    {txt:'Llamar Davivienda — avisar viaje Europa 21jul-8ago',done:false,urgent:true},
+    {txt:'Llamar Falabella — avisar viaje Europa 21jul-8ago',done:false,urgent:true},
+    {txt:'Verificar límite diario ARQ digital en exterior',done:false},
+    {txt:'Guardar PINs Davivienda y Falabella en el celular',done:false},
+    {txt:'Guardar números bloqueo internacional en el cel',done:false},
+    {txt:'Separar tarjetas: ARQ en bolsillo, Davivienda en maleta',done:false},
+    {txt:'Comprar recuerdos y regalos especiales antes de salir',done:false},
+  ]},
+  {titulo:'Equipaje',color:'var(--purple)', items:[
+    {txt:'Pasaporte + copias digital y papel',done:false},
+    {txt:'ARQ digital activa + Davivienda + Falabella',done:false},
+    {txt:'350 EUR efectivo (150 billetera + 200 maleta)',done:false},
+    {txt:'Adaptador europeo tipo F + cable cargador largo',done:false},
+    {txt:'Tenis running + 2 outfits deporte (lavado rápido)',done:false},
+    {txt:'Traje de baño — Cascais (25 jul) + Barceloneta (29 jul)',done:false},
+    {txt:'Chaqueta fina / impermeable — Amsterdam puede hacer frío',done:false},
+    {txt:'Botella reutilizable 500ml',done:false},
+    {txt:'Medicamentos básicos + curitas + ibuprofeno',done:false},
+    {txt:'Protector solar SPF50+ (verano europeo fuerte)',done:false},
+    {txt:'Cámara / celular con memoria libre para fotos',done:false},
+  ]},
+  {titulo:'Apps esenciales',color:'var(--teal)', items:[
+    {txt:'Google Maps — descargar OFFLINE todas las ciudades',done:false,urgent:true},
+    {txt:'Citymapper — metro BCN, PAR, AMS',done:false},
+    {txt:'Trainline u Omio — trenes Italia y Francia',done:false},
+    {txt:'Uber / Bolt — transporte urbano toda Europa',done:false},
+    {txt:'XE Currency — conversor EUR/COP en tiempo real',done:false},
+    {txt:'Rick Steves Audio Europe — audioguías GRATIS',done:false},
+    {txt:'Booking.com — guardar reservas offline',done:false},
+    {txt:'Google Translate — cámara para menús en italiano/PT',done:false},
+    {txt:'TheFork o Resy — reservar cena especial en Roma',done:false},
+    {txt:'Airalo — activar eSIM Europa antes de salir',done:false,urgent:true},
+  ]},
+];
+
+const HOTELS = [
+  {ciudad:'Madrid',nombre:'Room Gran Vía',fechas:'22–24 Jul · 1 persona',ref:'#5528992531',pin:'PIN 3880',notas:'Llegada nocturna. Zona Gran Vía, ideal para Malasaña y Retiro.'},
+  {ciudad:'Lisboa',nombre:'Home Lisbon Hostel',fechas:'24–26 Jul · 1 persona',ref:'CONFIRMADO',pin:'',notas:'Bairro Alto. A 10 min de los miradores y Alfama.'},
+  {ciudad:'Amsterdam',nombre:'Tourist Inn Amsterdam',fechas:'26–28 Jul · 1 persona',ref:'CONFIRMADO',pin:'',notas:'Centro histórico. A pie del Rijksmuseum y canales.'},
+  {ciudad:'Barcelona',nombre:'Unite Hostel BCN',fechas:'28–30 Jul · solo',ref:'#6504627200',pin:'PIN 8660',notas:'El Raval / Ramblas. Metro línea 3 a Sagrada Família.'},
+  {ciudad:'Barcelona',nombre:'Unite Hostel BCN',fechas:'30–31 Jul · doble',ref:'#5277741313',pin:'PIN 9435',notas:'Misma habitación con Victoria. Check-in doble el 30.'},
+  {ciudad:'París',nombre:'Ibis Tour Eiffel 15ème',fechas:'31 Jul–2 Ago · doble',ref:'#6587905774',pin:'PIN 9465',notas:'A 10 min caminando de la Torre Eiffel. Metro Duplex.'},
+  {ciudad:'Bérgamo',nombre:'Casa familia Victoria',fechas:'2–4 Ago · familia',ref:'Gratis 🏠',pin:'',notas:'Città Alta o zona. Coordinar llegada para las 19:30h.'},
+  {ciudad:'Roma',nombre:'Hotel Virginia Roma',fechas:'5–7 Ago · doble',ref:'#6935800658',pin:'PIN 2995',notas:'Zona Termini. A metro del Coliseo y Trastevere.'},
+  {ciudad:'Madrid',nombre:'Room Gran Vía Madrid',fechas:'7–8 Ago · doble',ref:'#5528992531',pin:'PIN 3880',notas:'Última noche europea. Salida vuelo 8 ago mañana.'},
+];
+
+const RUNNING = [
+  {ciudad:'Madrid',dia:'23 Jul',ruta:'Retiro → Puerta de Alcalá → Cibeles',km:'6 km',min:'45 min',intensidad:'Moderada'},
+  {ciudad:'Madrid',dia:'24 Jul',ruta:'Madrid Río / Casa de Campo',km:'7 km',min:'50 min',intensidad:'Moderada'},
+  {ciudad:'Lisboa',dia:'25 Jul',ruta:'Ribera del Tajo → Torre de Belém',km:'5.5 km',min:'40 min',intensidad:'Ligera'},
+  {ciudad:'Lisboa',dia:'26 Jul',ruta:'Miradouros: S.Pedro → Graça → S.Jorge',km:'6 km',min:'50 min',intensidad:'Moderada'},
+  {ciudad:'Amsterdam',dia:'27 Jul',ruta:'Vondelpark → Museumplein → Jordaan',km:'7 km',min:'50 min',intensidad:'Moderada'},
+  {ciudad:'Amsterdam',dia:'28 Jul',ruta:'Canales históricos + Plantage',km:'6 km',min:'45 min',intensidad:'Moderada'},
+  {ciudad:'Barcelona',dia:'29 Jul',ruta:'Litoral: Puerto Olímpico → Barceloneta',km:'5.5 km',min:'40 min',intensidad:'Moderada'},
+  {ciudad:'Barcelona',dia:'30 Jul',ruta:'Subida Montjuïc',km:'5 km',min:'45 min',intensidad:'Intensa'},
+  {ciudad:'París',dia:'1 Ago',ruta:'Tullerías → Sena → Champs-Élysées → Arc',km:'8 km',min:'55 min',intensidad:'Intensa'},
+  {ciudad:'París',dia:'2 Ago',ruta:'Jardín du Luxembourg',km:'6 km',min:'45 min',intensidad:'Moderada'},
+  {ciudad:'Milán',dia:'4 Ago',ruta:'Parco Sempione',km:'5 km',min:'35 min',intensidad:'Moderada'},
+  {ciudad:'Roma',dia:'6 Ago',ruta:'Villa Borghese → Pincio',km:'7 km',min:'55 min',intensidad:'Intensa'},
+  {ciudad:'Roma',dia:'7 Ago',ruta:'Circo Máximo al amanecer 🏁',km:'5.5 km',min:'40 min',intensidad:'Moderada'},
+];
+
+const APPS = [
+  {icon:'🗺️',nombre:'Google Maps',desc:'Descargar mapas OFFLINE de todas las ciudades antes de salir',badge:'must'},
+  {icon:'🚇',nombre:'Citymapper',desc:'Metro en tiempo real — Barcelona, París, Amsterdam',badge:'must'},
+  {icon:'🚂',nombre:'Trainline / Omio',desc:'Trenes europeos — tickets Italia, Francia, todo en una app',badge:'must'},
+  {icon:'🌐',nombre:'Google Translate',desc:'Cámara para menús en italiano y portugués',badge:'key'},
+  {icon:'🚗',nombre:'Uber / Bolt',desc:'Transporte urbano en toda Europa, más barato que taxi',badge:'key'},
+  {icon:'💱',nombre:'XE Currency',desc:'Conversor EUR/COP en tiempo real sin internet',badge:'key'},
+  {icon:'🎧',nombre:'Rick Steves Audio',desc:'Audioguías GRATUITAS para Coliseo, Vaticano, París, Roma',badge:'nice'},
+  {icon:'🏨',nombre:'Booking.com',desc:'Confirmar y guardar todas las reservas offline',badge:'key'},
+  {icon:'🍽️',nombre:'TheFork / Resy',desc:'Reservar restaurantes — útil para cena especial Roma',badge:'nice'},
+  {icon:'🎵',nombre:'Spotify',desc:'Playlist Europa 2026 + podcasts para los vuelos',badge:'nice'},
+  {icon:'📡',nombre:'Airalo',desc:'eSIM Europa — activar antes de salir desde Cali',badge:'must'},
+  {icon:'💳',nombre:'App ARQ / Nequi',desc:'Pagos contactless — configurar Google Pay o Apple Pay',badge:'must'},
+];
+
+
+const TRACKER_CITIES = [
+  {ciudad:"Madrid solo (22-24 jul)",presup:84},
+  {ciudad:"Lisboa solo (24-26 jul)",presup:122},
+  {ciudad:"Amsterdam solo (26-28 jul)",presup:113},
+  {ciudad:"Barcelona solo+pareja (28-30 jul)",presup:136},
+  {ciudad:"Paris pareja (30jul-1ago)",presup:143},
+  {ciudad:"Bergamo/Venecia/Milan familia (2-4ago)",presup:229},
+  {ciudad:"Florencia-Roma pareja (5-7ago)",presup:314},
+  {ciudad:"Regreso Madrid (8ago)",presup:20},
+];
+
+const RUTAS_CIUDAD = [
+  {id:"mad",nombre:"Madrid",flag:"🇪🇸",dias:"22-24 Jul / 7-8 Ago",color:"var(--solo)",
+   vibe:"Capital que nunca duerme. Arquitectura monumental, tapas con sabor y noches infinitas.",
+   paradas:[
+    {titulo:"Parque del Retiro",color:"#27AE60",items:[
+      {nombre:"Palacio de Cristal",precio:"Gratis"},{nombre:"Lago del Retiro (barca)",precio:"€6"},{nombre:"Jardines y esculturas",precio:"Gratis"}],transporte:null},
+    {titulo:"Centro historico",color:"#3498DB",items:[
+      {nombre:"Puerta del Sol",precio:"Gratis"},{nombre:"Plaza Mayor + tapas",precio:"€6-10"},{nombre:"Mercado de San Miguel",precio:"Gratis entrada"}],transporte:"Metro L2 a Sol (5 min)"},
+    {titulo:"Gran Via / Malasana",color:"#E94560",items:[
+      {nombre:"Gran Via iluminada (noche)",precio:"Gratis"},{nombre:"Malasana menu del dia",precio:"€11-13"},{nombre:"Canas Barrio de las Letras",precio:"€2-4 c/u"}],transporte:"15 min caminando"},
+    {titulo:"Palacio Real + Bernabeu",color:"#8E44AD",items:[
+      {nombre:"Palacio Real exterior",precio:"Gratis"},{nombre:"Plaza de Oriente",precio:"Gratis"},{nombre:"Bernabeu exterior sin entrada",precio:"Gratis"}],transporte:"Metro L2 a Opera"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"Metro bono 10 viajes ~12 EUR. Aeropuerto: L8 Nuevos Ministerios ~5 EUR."},
+    {label:"Cervezas",color:"var(--gold)",val:"Cana 200ml: 2-3 EUR. Barrio Letras y Malasana son las zonas."},
+    {label:"Horarios",color:"var(--teal)",val:"Almuerzo 14-16h. Cena desde 21h. Tiendas hasta 21h."},
+    {label:"Tip local",color:"var(--accent)",val:"Pide cana no cerveza. Tapa gratis en muchos bares del Barrio de las Letras."},
+   ]},
+  {id:"lis",nombre:"Lisboa",flag:"🇵🇹",dias:"24-26 Jul",color:"var(--green)",
+   vibe:"Ciudad de los miradores y el fado. Adoquines centenarios, pasteis de nata y el mejor bacalhau del mundo.",
+   paradas:[
+    {titulo:"Belem",color:"#27AE60",items:[
+      {nombre:"Pasteis de Belem (originales 1837)",precio:"€1.20 c/u"},{nombre:"Torre de Belem",precio:"€6"},{nombre:"Monasterio dos Jeronimos",precio:"€10"}],transporte:null},
+    {titulo:"Cascais (Playa)",color:"#3498DB",items:[
+      {nombre:"Praia da Rainha (tranquila)",precio:"Gratis"},{nombre:"Praia do Guincho (olas)",precio:"Gratis"},{nombre:"Cascais centro",precio:"Gratis"}],transporte:"Tren Linha Cascais desde Cais do Sodre · 40 min · 2.50 EUR"},
+    {titulo:"Alfama + Miradores",color:"#E94560",items:[
+      {nombre:"Mirador de Santa Luzia",precio:"Gratis"},{nombre:"Castillo de Sao Jorge",precio:"€15"},{nombre:"Fado en tasca local",precio:"€10-20"}],transporte:"Subida a pie o Tuk-tuk 5 EUR"},
+    {titulo:"Bairro Alto / Chiado",color:"#8E44AD",items:[
+      {nombre:"Livraria Bertrand (libreria historica)",precio:"Gratis"},{nombre:"Elevador de Santa Justa",precio:"€5.30"},{nombre:"Cenas y cervezas Sagres",precio:"€8-15"}],transporte:"Metro Linha Verde a Baixa-Chiado"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"Tarjeta Viva Viagem 0.50 EUR + recargas. Metro + tren Cascais con la misma."},
+    {label:"Cervezas",color:"var(--gold)",val:"Sagres o Super Bock 2-3 EUR. Pedir imperial (200ml) o caneca (400ml)."},
+    {label:"Comer",color:"var(--teal)",val:"Bacalhau a Bras o Bica + pastel de nata = desayuno perfecto. Tasca = local barato."},
+    {label:"Tip local",color:"var(--accent)",val:"Lisboa tiene 7 colinas. Zapatos comodos obligatorio. El tranvia 28 va muy lleno."},
+   ]},
+  {id:"ams",nombre:"Amsterdam",flag:"🇳🇱",dias:"26-28 Jul",color:"var(--solo)",
+   vibe:"Ciudad de la bici y los canales. Arte de clase mundial y cerveza artesanal en un molino de viento real.",
+   paradas:[
+    {titulo:"Rijksmuseum + Museumplein",color:"#27AE60",items:[
+      {nombre:"Rijksmuseum (Rembrandt, Vermeer)",precio:"€22.50"},{nombre:"Van Gogh Museum",precio:"€22"},{nombre:"Museumplein picnic",precio:"Gratis"}],transporte:null},
+    {titulo:"Jordaan + Canales",color:"#3498DB",items:[
+      {nombre:"Canal Prinsengracht",precio:"Gratis"},{nombre:"Bitterballen en terraza canal",precio:"€8-12"},{nombre:"Casa de Ana Frank exterior",precio:"Gratis"}],transporte:"Bici MacBike ~14 EUR/dia"},
+    {titulo:"De Wallen (Barrio Rojo)",color:"#E94560",items:[
+      {nombre:"Recorrer de dia, fenomeno unico",precio:"Gratis"},{nombre:"Oude Kerk (iglesia mas antigua)",precio:"€17.50"},{nombre:"Ambiente nocturno canales",precio:"Gratis"}],transporte:"15 min caminando desde Centraal"},
+    {titulo:"Brouwerij t IJ",color:"#F5A623",items:[
+      {nombre:"Cerveceria en molino de viento real",precio:"€4-6 cerveza"},{nombre:"Visita guiada destileria",precio:"€5"},{nombre:"Terraza exterior",precio:"Consumicion"}],transporte:"20 min en bici desde Centraal"},
+    {titulo:"Albert Cuypmarkt",color:"#8E44AD",items:[
+      {nombre:"Mercado mas grande de Holanda",precio:"Gratis entrada"},{nombre:"Stroopwafels frescos",precio:"€1.50"},{nombre:"Quesos, flores, ropa",precio:"Varios"}],transporte:"Tram 4 a Albert Cuypstraat"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"Bici = rey. MacBike o Donkey Republic ~14 EUR/dia. Tram y metro con OV-chipkaart."},
+    {label:"Cervezas",color:"var(--gold)",val:"Heineken es la turista. Pide Brouwerij t IJ, Oedipus o Troost para cerveza artesanal local."},
+    {label:"Horarios",color:"var(--teal)",val:"Tiendas hasta 18h (domingos 17h). Coffee shops desde las 11h."},
+    {label:"Tip local",color:"var(--accent)",val:"Cuidado con carriles de bici. Tienen prioridad total. No camines en el carril."},
+   ]},
+  {id:"bcn",nombre:"Barcelona",flag:"🇪🇸",dias:"28-31 Jul",color:"var(--pareja)",
+   vibe:"Gaudi, Mediterraneo y tapas catalanas. La ciudad mas cosmopolita de Espana y la primera con Victoria.",
+   paradas:[
+    {titulo:"Sagrada Familia (reservada)",color:"#E94560",items:[
+      {nombre:"Sagrada Familia RESERVADA",precio:"€26"},{nombre:"Hospital de Sant Pau",precio:"€16"},{nombre:"Avenida Gaudi exterior",precio:"Gratis"}],transporte:null},
+    {titulo:"Park Guell",color:"#27AE60",items:[
+      {nombre:"Zona monumental (reservar online)",precio:"€10"},{nombre:"Zona libre vistas panoramicas",precio:"Gratis"},{nombre:"Barrio de Gracia",precio:"Gratis"}],transporte:"Metro L3 a Lesseps + 10 min subida"},
+    {titulo:"Passeig de Gracia",color:"#3498DB",items:[
+      {nombre:"Casa Batllo exterior",precio:"Interior €35"},{nombre:"La Pedrera exterior",precio:"Interior €25"},{nombre:"Shopping y terrazas",precio:"Libre"}],transporte:"Metro L2/L3/L4 a Passeig de Gracia"},
+    {titulo:"Barceloneta (Playa)",color:"#F5A623",items:[
+      {nombre:"Playa Barceloneta",precio:"Gratis"},{nombre:"Chiringuito cervezas",precio:"€3-5"},{nombre:"Puerto Olimpico",precio:"Gratis"}],transporte:"20 min caminando desde Ramblas o Metro L4"},
+    {titulo:"Barrio Gotico + Born",color:"#8E44AD",items:[
+      {nombre:"Catedral de Barcelona exterior",precio:"Gratis"},{nombre:"Calles medievales laberinticas",precio:"Gratis"},{nombre:"Tapas catalanas + cervezas Estrella",precio:"€10-18"}],transporte:"5 min de Las Ramblas"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"T-Casual 10 viajes ~12 EUR. Metro L9 al aeropuerto ~5.50 EUR. App TMB."},
+    {label:"Cervezas",color:"var(--gold)",val:"Estrella Damm es la local. Terraza nocturna en Eixample o Barceloneta."},
+    {label:"Calor",color:"var(--accent)",val:"Julio 30-35C. Siesta 14-16h. Playa mejor despues de las 17h."},
+    {label:"Tip local",color:"var(--teal)",val:"Las Ramblas tiene carteristas. Gotico y Born son mas autenticos para comer."},
+   ]},
+  {id:"par",nombre:"Paris",flag:"🇫🇷",dias:"31 Jul - 2 Ago",color:"var(--pareja)",
+   vibe:"La ciudad de la luz. Primera vez de Victoria. Louvre, Torre Eiffel y picnic con queso y vino.",
+   paradas:[
+    {titulo:"Louvre (ya pagado)",color:"#3498DB",items:[
+      {nombre:"Louvre - PAGADO 1 ago 14:30h",precio:"Gratis (pagado)"},{nombre:"Mona Lisa, Venus de Milo",precio:"Incluido"},{nombre:"Jardin de las Tuileries",precio:"Gratis"}],transporte:null},
+    {titulo:"Torre Eiffel + Champ de Mars",color:"#E94560",items:[
+      {nombre:"Torre Eiffel vista exterior",precio:"Gratis"},{nombre:"Picnic Champ de Mars con queso y vino",precio:"~€10 Monoprix"},{nombre:"Destello nocturno cada hora en punto",precio:"Gratis"}],transporte:"Metro Ligne 6 a Bir-Hakeim"},
+    {titulo:"Crucero Sena (ya pagado)",color:"#27AE60",items:[
+      {nombre:"Crucero Sena - PAGADO 1 ago noche",precio:"Gratis (pagado)"},{nombre:"Vistas Notre Dame desde el agua",precio:"Incluido"},{nombre:"Torre Eiffel iluminada desde el rio",precio:"Incluido"}],transporte:"Desde Pont de l Alma"},
+    {titulo:"Montmartre + Sacre-Coeur",color:"#8E44AD",items:[
+      {nombre:"Sacre-Coeur entrada",precio:"Gratis"},{nombre:"Place du Tertre artistas",precio:"Gratis"},{nombre:"Copa con vistas desde la colina",precio:"€8-12"}],transporte:"Metro Ligne 2 a Anvers"},
+    {titulo:"Le Marais + Notre Dame",color:"#F5A623",items:[
+      {nombre:"Notre Dame exterior reconstruida",precio:"Gratis"},{nombre:"Ile de la Cite paseo nocturno",precio:"Gratis"},{nombre:"Cena Le Marais barrio judio",precio:"€20-35"}],transporte:"Metro Ligne 1 a Hotel de Ville"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"Navigo Liberte+ por viaje 2.15 EUR. Orly: RER B + Orlyval ~13 EUR."},
+    {label:"Cultura",color:"var(--gold)",val:"Desayuno: cafe au lait + croissant 4-6 EUR. Brasserie = restaurante clasico parisino."},
+    {label:"Zonas",color:"var(--teal)",val:"Le Marais y Montmartre son los barrios mas autenticos. Champs-Elysees es para turistas."},
+    {label:"Tip local",color:"var(--accent)",val:"Habla aunque sea Bonjour antes de pedir en ingles. Los parisinos lo agradecen mucho."},
+   ]},
+  {id:"bgy",nombre:"Bergamo / Venecia / Milan",flag:"🇮🇹",dias:"2-4 Ago",color:"var(--familia)",
+   vibe:"El norte de Italia con la familia de Victoria. Citta Alta medieval, gondola en Venecia y aperitivo en los Navigli.",
+   paradas:[
+    {titulo:"Bergamo Citta Alta",color:"#8E44AD",items:[
+      {nombre:"Citta Alta ciudad amurallada medieval",precio:"Gratis"},{nombre:"Funicolare a la colina",precio:"€1.30"},{nombre:"Aperitivo con prosecco local",precio:"€8-12"}],transporte:null},
+    {titulo:"Venecia (3 Ago)",color:"#E94560",items:[
+      {nombre:"Piazza San Marco",precio:"Gratis"},{nombre:"Basilica San Marcos",precio:"€3"},{nombre:"Gondola canales menores",precio:"€80-100 privada"},{nombre:"Cicchetti tapas venecianas",precio:"€1.50 c/u"}],transporte:"Tren Bergamo a Venecia 2.5h ~15 EUR"},
+    {titulo:"Milan Duomo + Navigli (4 Ago)",color:"#3498DB",items:[
+      {nombre:"Duomo di Milano + terraza",precio:"€15 terraza"},{nombre:"Galleria Vittorio Emanuele II",precio:"Gratis"},{nombre:"Aperitivo Navigli Campari Spritz + buffet",precio:"€10"}],transporte:"Tren Bergamo a Milan 45 min 5 EUR"},
+   ],
+   info:[
+    {label:"Trenes",color:"var(--blue)",val:"Comprar en taquilla o app Trenitalia. VALIDAR ticket fisico antes de subir (maquina amarilla)."},
+    {label:"Aperitivo",color:"var(--gold)",val:"Navigli 17-20h: Campari Spritz ~10 EUR incluye buffet de antipasti gratis."},
+    {label:"Gondola",color:"var(--teal)",val:"Canales menores lejos de San Marcos son mas romanticos y menos turisticos. ~30 min."},
+    {label:"Venecia tip",color:"var(--accent)",val:"Llegar antes de las 10am. Agua en tienda 1.50 EUR, en restaurante 4 EUR."},
+   ]},
+  {id:"flr",nombre:"Florencia",flag:"🇮🇹",dias:"5 Ago (parada en ruta)",color:"var(--pareja)",
+   vibe:"La cuna del Renacimiento en 3-4 horas. Brunelleschi, Ponte Vecchio y el mejor lampredotto callejero de Italia.",
+   paradas:[
+    {titulo:"Duomo di Firenze",color:"#E94560",items:[
+      {nombre:"Cupula Brunelleschi exterior",precio:"Gratis"},{nombre:"Interior Catedral",precio:"Gratis"},{nombre:"Subir cupula (reservar)",precio:"€18"}],transporte:null},
+    {titulo:"Piazzale Michelangelo",color:"#27AE60",items:[
+      {nombre:"Vistas panoramicas de Florencia",precio:"Gratis"},{nombre:"Copia del David exterior",precio:"Gratis"},{nombre:"Atardecer desde la colina",precio:"Gratis"}],transporte:"Bus 13 desde centro 15 min 1.70 EUR"},
+    {titulo:"Ponte Vecchio + Oltrarno",color:"#F5A623",items:[
+      {nombre:"Ponte Vecchio joyerias historicas",precio:"Gratis"},{nombre:"Gelato Oltrarno",precio:"€3"},{nombre:"Lampredotto callejero",precio:"€5"}],transporte:"10 min desde el Duomo"},
+   ],
+   info:[
+    {label:"Tiempo",color:"var(--blue)",val:"3-4h suficiente para Duomo + Piazzale + Ponte Vecchio. Uffizi requiere dia completo."},
+    {label:"Comer",color:"var(--gold)",val:"Lampredotto = tripas de ternera en pan. El bocadillo mas local de Florencia. 5 EUR."},
+    {label:"Conexion",color:"var(--teal)",val:"Florencia a Roma en Frecciargento 1.5h ~25-40 EUR. Comprar en Trenitalia antes."},
+    {label:"Tip",color:"var(--accent)",val:"El Oltrarno (orilla sur del Arno) es mas autentico y menos turistico."},
+   ]},
+  {id:"rom",nombre:"Roma",flag:"🇮🇹",dias:"5-7 Ago",color:"var(--pareja)",
+   vibe:"La Ciudad Eterna. 2.000 anos de historia a pie, el mejor espresso del mundo y la cena mas especial del viaje.",
+   paradas:[
+    {titulo:"Coliseo + Foro Romano",color:"#E94560",items:[
+      {nombre:"Coliseo RESERVAR YA se agota",precio:"€16 combo"},{nombre:"Foro Romano + Palatino",precio:"Incluido"},{nombre:"Circo Maximo exterior",precio:"Gratis"}],transporte:null},
+    {titulo:"Vaticano",color:"#27AE60",items:[
+      {nombre:"Plaza San Pedro",precio:"Gratis"},{nombre:"Basilica de San Pedro",precio:"Gratis"},{nombre:"Cupula San Pedro",precio:"€8 escaleras"}],transporte:"Metro Linea A a Ottaviano"},
+    {titulo:"Fontana di Trevi + Panteon",color:"#3498DB",items:[
+      {nombre:"Fontana di Trevi moneda",precio:"€3"},{nombre:"Panteon reservar online",precio:"€5"},{nombre:"Piazza Navona noche",precio:"Gratis"}],transporte:"15 min caminando entre los tres"},
+    {titulo:"Trastevere",color:"#8E44AD",items:[
+      {nombre:"Barrio medieval mas romantico",precio:"Gratis"},{nombre:"Cena especial con Victoria",precio:"€60-80 pareja"},{nombre:"Caminata nocturna adoquines",precio:"Gratis"}],transporte:"Bus 8 desde centro 10 min"},
+    {titulo:"Villa Borghese running",color:"#F5A623",items:[
+      {nombre:"Villa Borghese parque",precio:"Gratis"},{nombre:"Terraza Pincio vistas Vaticano",precio:"Gratis"},{nombre:"Galeria Borghese opcional",precio:"€15"}],transporte:"Metro A a Spagna + subida"},
+   ],
+   info:[
+    {label:"Transporte",color:"var(--blue)",val:"Metro Lineas A y B + bus. Billete 1.50 EUR / 100 min. Leonardo Express aeropuerto 14 EUR."},
+    {label:"Cultura",color:"var(--gold)",val:"Bar romano barra de pie. Cappuccino 1.20 EUR. Cornetto 1 EUR. Nunca cappuccino despues de las 11h."},
+    {label:"Coliseo",color:"var(--accent)",val:"RESERVAR ONLINE con 2-3 semanas minimo. En agosto se agota en horas."},
+    {label:"Tip local",color:"var(--accent)",val:"Agua potable gratis en las nasoni (grifos de la calle). Hay 2.500 en toda Roma."},
+   ]},
+];
+
+function loadState(){try{return JSON.parse(localStorage.getItem('europa2026')||'{}')}catch(e){return{}}}
+function saveState(s){localStorage.setItem('europa2026',JSON.stringify(s))}
+let STATE=loadState();
+
+function switchTab(id){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  STATE.activeTab=id;saveState(STATE);
+}
+
+function colorVar(c){return{'solo':'var(--solo)','pareja':'var(--pareja)','familia':'var(--familia)','regreso':'var(--regreso)'}[c]||'var(--muted)'}
+
+function renderDays(){
+  const cont=document.getElementById('days-container');
+  cont.innerHTML='';
+  DAYS.forEach(d=>{
+    const open=STATE['open_'+d.id]||false;
+    const note=STATE['note_'+d.id]||'';
+    const col=colorVar(d.color);
+    const paidHTML=d.pagado.filter(p=>p[1]!='0').map(p=>`<div class="budget-item"><span class="budget-item-name">${p[0]}</span><span class="budget-item-eur" style="color:var(--green)">€${p[1]}</span></div>`).join('');
+    const spendHTML=d.gastos.map(g=>`<div class="budget-item"><span class="budget-item-name">${g[0]}</span><span class="budget-item-met ${g[2]==='arq'?'met-arq':'met-ef'}">${g[2]==='arq'?'ARQ':'Efectivo'}</span><span class="budget-item-eur" style="color:var(--accent)">€${g[1]}</span></div>`).join('');
+    const schedHTML=d.horario.map(h=>`<div class="schedule-item"><div class="schedule-time">${h[0]}</div><div class="schedule-act">${h[1]}</div></div>`).join('');
+    const pct=Math.min(100,(d.saldo/350)*100);
+    const vueloPill=d.vuelo?`<div class="meta-pill"><span class="meta-pill-label">VUELO</span><span class="meta-pill-text">${d.vuelo}</span></div>`:'';
+    const card=document.createElement('div');
+    card.className=`day-card${open?' open':''}`;card.id='card-'+d.id;card.dataset.ciudad=d.ciudad;
+    card.innerHTML=`
+      <div class="day-header" onclick="toggleDay('${d.id}')">
+        <div class="day-badge" style="color:${col};border-color:${col}40;background:${col}12">${d.fecha}</div>
+        <div><div class="day-title">${d.ciudad}</div><div class="day-tipo">${d.tipo}</div></div>
+        <div class="day-total-badge">€${d.total} día</div>
+        <div class="day-chevron">▼</div>
+      </div>
+      <div class="day-body">
+        <div class="day-grid">
+          <div><div class="schedule-title">Plan del día</div>${schedHTML}</div>
+          <div>
+            <div class="budget-title">Presupuesto</div>
+            ${paidHTML?`<div class="budget-paid"><div class="budget-paid-title">✅ Ya pagado</div>${paidHTML}</div>`:''}
+            <div class="budget-spend"><div class="budget-spend-title">💸 Gastos estimados</div>${spendHTML}</div>
+          </div>
+        </div>
+        <div class="day-meta">
+          ${vueloPill}
+          <div class="meta-pill"><span class="meta-pill-label">RUN</span><span class="meta-pill-text">🏃 ${d.running}</span></div>
+        </div>
+        <div class="day-tip">${d.tip}</div>
+        <div class="saldo-bar">
+          <div class="saldo-bar-label">Efectivo acum.</div>
+          <div class="saldo-bar-track"><div class="saldo-bar-fill" style="width:${pct}%"></div></div>
+          <div class="saldo-bar-num">€${d.saldo}/€350</div>
+        </div>
+        ${d.desglose ? `<div style="margin-top:12px;background:var(--dark3);border-radius:10px;padding:10px 14px">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:8px">DESGLOSE POR CATEGORÍA</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px">
+            ${d.desglose.desayuno>0?`<div style="font-size:.75rem;color:var(--white)">🥐 Desayuno <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.desayuno}</span></div>`:''}
+            ${d.desglose.cafe>0?`<div style="font-size:.75rem;color:var(--white)">☕ Cafés <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.cafe}</span></div>`:''}
+            ${d.desglose.almuerzo>0?`<div style="font-size:.75rem;color:var(--white)">🍽️ Almuerzo <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.almuerzo}</span></div>`:''}
+            ${d.desglose.cena>0?`<div style="font-size:.75rem;color:var(--white)">🍷 Cena <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.cena}</span></div>`:''}
+            ${d.desglose.cervezas>0?`<div style="font-size:.75rem;color:var(--white)">🍺 Cervezas <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.cervezas}</span></div>`:''}
+            ${d.desglose.transporte>0?`<div style="font-size:.75rem;color:var(--white)">🚇 Transporte <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.transporte}</span></div>`:''}
+            ${d.desglose.extras>0?`<div style="font-size:.75rem;color:var(--white)">🎫 Extras <span style="color:var(--gold);font-weight:600;float:right">€${d.desglose.extras}</span></div>`:''}
+          </div>
+        </div>` : ''}
+        <div class="day-notes">
+          <div class="notes-label">Notas del día</div>
+          <textarea class="notes-textarea" placeholder="Escribe aquí tus notas, ideas, recuerdos..." oninput="saveNote('${d.id}',this.value)">${note}</textarea>
+        </div>
+      </div>`;
+    cont.appendChild(card);
+  });
+}
+function toggleDay(id){const card=document.getElementById('card-'+id);STATE['open_'+id]=card.classList.toggle('open');saveState(STATE)}
+function saveNote(id,val){STATE['note_'+id]=val;saveState(STATE)}
+
+function renderChecklist(){
+  const cont=document.getElementById('checklist-container');cont.innerHTML='';
+  CHECKLIST.forEach((sec,si)=>{
+    const done=sec.items.filter((_,ii)=>STATE[`chk_${si}_${ii}`]).length;
+    const div=document.createElement('div');div.className='checklist-section';
+    const itemsHTML=sec.items.map((item,ii)=>{
+      const checked=STATE[`chk_${si}_${ii}`]||false;
+      return `<div class="check-item${checked?' checked':''}${item.urgent&&!checked?' urgent':''}" onclick="toggleCheck(${si},${ii},this)">
+        <div class="check-box"></div><span class="check-text">${item.txt}</span></div>`;
+    }).join('');
+    div.innerHTML=`<div class="checklist-sec-header" style="background:${sec.color}18;border-bottom:1px solid ${sec.color}30">
+      <div class="checklist-sec-title" style="color:${sec.color}">${sec.titulo}</div>
+      <div class="checklist-progress">${done}/${sec.items.length}</div></div>
+      <div class="checklist-items">${itemsHTML}</div>`;
+    cont.appendChild(div);
+  });
+}
+function toggleCheck(si,ii,el){
+  STATE[`chk_${si}_${ii}`]=!STATE[`chk_${si}_${ii}`];saveState(STATE);
+  el.classList.toggle('checked',STATE[`chk_${si}_${ii}`]);
+  el.classList.toggle('urgent',CHECKLIST[si].items[ii].urgent&&!STATE[`chk_${si}_${ii}`]);
+  const sec=el.closest('.checklist-section');
+  const all=sec.querySelectorAll('.check-item').length;
+  const done=sec.querySelectorAll('.check-item.checked').length;
+  sec.querySelector('.checklist-progress').textContent=done+'/'+all;
+}
+
+function renderHotels(){
+  document.getElementById('hotels-container').innerHTML=HOTELS.map(h=>`
+    <div class="hotel-card">
+      <div class="hotel-dates">${h.fechas}</div>
+      <div class="hotel-name">${h.nombre}</div>
+      <div class="hotel-city">📍 ${h.ciudad}</div>
+      <div class="hotel-ref">${h.ref}</div>
+      ${h.pin?`<div class="hotel-pin">🔑 ${h.pin}</div>`:''}
+      <div style="font-size:.75rem;color:var(--muted);margin-top:8px;line-height:1.4">${h.notas}</div>
+      <div class="hotel-status" style="margin-top:10px">✅ Confirmado en Booking</div>
+    </div>`).join('');
+}
+
+function renderRunning(){
+  document.getElementById('running-container').innerHTML=RUNNING.map((r,i)=>{
+    const done=STATE['run_'+i]||false;
+    return `<div class="run-card${done?' done':''}" id="run-${i}">
+      <div style="font-size:1.4rem">🏃</div>
+      <div class="run-info">
+        <div class="run-day">${r.ciudad} · ${r.dia}</div>
+        <div class="run-route">${r.ruta}</div>
+        <div class="run-meta">
+          <span class="run-pill km">${r.km}</span>
+          <span class="run-pill min">${r.min}</span>
+          <span class="run-pill int">${r.intensidad}</span>
+        </div>
+      </div>
+      <button class="run-done-btn" onclick="toggleRun(${i})">${done?'✓ Hecha':'Marcar'}</button>
+    </div>`;
+  }).join('');
+}
+function toggleRun(i){
+  STATE['run_'+i]=!STATE['run_'+i];saveState(STATE);
+  const card=document.getElementById('run-'+i);
+  card.classList.toggle('done',STATE['run_'+i]);
+  card.querySelector('.run-done-btn').textContent=STATE['run_'+i]?'✓ Hecha':'Marcar';
+}
+
+function renderApps(){
+  const labels={must:'Imprescindible',key:'Importante',nice:'Util'};
+  document.getElementById('apps-container').innerHTML=APPS.map(a=>`
+    <div class="app-card">
+      <div class="app-icon">${a.icon}</div>
+      <div><div class="app-name">${a.nombre}</div><div class="app-desc">${a.desc}</div>
+      <span class="app-badge ${a.badge}">${labels[a.badge]}</span></div>
+    </div>`).join('');
+}
+
+function renderTracker(){
+  const cont=document.getElementById('tracker-rows');
+  cont.innerHTML=TRACKER_CITIES.map((tc,i)=>{
+    const val=STATE['track_'+i]||'';
+    const num=parseFloat(val)||0;
+    const diff=tc.presup-num;
+    const diffTxt=num>0?(diff>=0?`<span class="tracker-diff diff-under">-€${diff.toFixed(0)} bajo</span>`:`<span class="tracker-diff diff-over">+€${Math.abs(diff).toFixed(0)} sobre</span>`):`<span class="tracker-diff" style="color:var(--muted)">—</span>`;
+    return `<div class="tracker-row">
+      <div class="tracker-city">${tc.ciudad}</div>
+      <div class="tracker-budget">Prev. €${tc.presup}</div>
+      <div class="tracker-input-wrap"><span class="tracker-input-prefix">€</span>
+        <input type="number" class="tracker-input" placeholder="0" value="${val}" oninput="updateTracker(${i},this.value)">
+      </div>${diffTxt}</div>`;
+  }).join('');
+  updateBudgetHeader();
+}
+function updateTracker(i,val){
+  STATE['track_'+i]=val;saveState(STATE);
+  const rows=document.querySelectorAll('.tracker-row');
+  const tc=TRACKER_CITIES[i];const num=parseFloat(val)||0;const diff=tc.presup-num;
+  const diffEl=rows[i].querySelector('.tracker-diff');
+  if(num>0){diffEl.className=diff>=0?'tracker-diff diff-under':'tracker-diff diff-over';diffEl.textContent=diff>=0?'-€'+diff.toFixed(0)+' bajo':'+€'+Math.abs(diff).toFixed(0)+' sobre';}
+  else{diffEl.className='tracker-diff';diffEl.style.color='var(--muted)';diffEl.textContent='—';}
+  updateBudgetHeader();
+}
+function updateBudgetHeader(){
+  const gastado=TRACKER_CITIES.reduce((acc,_,i)=>acc+(parseFloat(STATE['track_'+i])||0),0);
+  document.getElementById('bov-gastado').textContent='€'+gastado.toFixed(0);
+}
+
+function renderRutas(){
+  const cont=document.getElementById('rutas-container');
+  cont.innerHTML='';
+  RUTAS_CIUDAD.forEach(function(r){
+    const open=STATE['ruta_'+r.id]||false;
+    const paradasHTML=r.paradas.map(function(p,pi){
+      const isLast=pi===r.paradas.length-1;
+      const itemsHTML=p.items.map(function(item){
+        const isFree=item.precio==='Gratis'||item.precio.indexOf('Gratis')>-1||item.precio.indexOf('pagado')>-1;
+        return `<div class="ruta-stop-item"><span class="ruta-stop-item-name">${item.nombre}</span><span class="ruta-stop-item-price ${isFree?'price-free':'price-paid'}">${item.precio}</span></div>`;
+      }).join('');
+      const transHTML=p.transporte?`<div class="ruta-stop-transport">${p.transporte}</div>`:'';
+      return `<div class="ruta-stop">
+        <div class="ruta-stop-left">
+          <div class="ruta-stop-dot" style="background:${p.color}">${pi+1}</div>
+          ${isLast?'':'<div class="ruta-stop-line"></div>'}
+        </div>
+        <div style="flex:1">
+          ${transHTML}
+          <div class="ruta-stop-content">
+            <div class="ruta-stop-title" style="color:${p.color}">${p.titulo}</div>
+            <div class="ruta-stop-items">${itemsHTML}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+    const infoHTML=r.info.map(function(inf){
+      return `<div class="ruta-info-card"><div class="ruta-info-label" style="color:${inf.color}">${inf.label}</div><div class="ruta-info-val">${inf.val}</div></div>`;
+    }).join('');
+    const card=document.createElement('div');
+    card.className='ruta-ciudad-card'+(open?' open':'');
+    card.id='ruta-'+r.id;
+    card.innerHTML=`
+      <div class="ruta-ciudad-header" onclick="toggleRuta('${r.id}')" style="background:${r.color}12;border-bottom:1px solid rgba(128,128,128,0.15)">
+        <div class="ruta-ciudad-flag">${r.flag}</div>
+        <div>
+          <div class="ruta-ciudad-name" style="color:${r.color}">${r.nombre}</div>
+          <div class="ruta-ciudad-days">${r.dias}</div>
+        </div>
+        <div class="ruta-ciudad-chevron">▼</div>
+      </div>
+      <div class="ruta-ciudad-body">
+        <div class="ruta-vibe">"${r.vibe}"</div>
+        <div class="ruta-mapa">${paradasHTML}</div>
+        <div class="ruta-info-grid">${infoHTML}</div>
+      </div>`;
+    cont.appendChild(card);
+  });
+}
+function toggleRuta(id){
+  const card=document.getElementById('ruta-'+id);
+  STATE['ruta_'+id]=card.classList.toggle('open');saveState(STATE);
+}
+
+
+function filterCity(ciudad){
+  // Actualizar botones
+  document.querySelectorAll('.city-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  // Mostrar/ocultar tarjetas
+  document.querySelectorAll('.day-card').forEach(card=>{
+    if(ciudad==='todas'){
+      card.classList.remove('hidden');
+    } else {
+      const match = card.dataset.ciudad && card.dataset.ciudad.includes(ciudad);
+      card.classList.toggle('hidden', !match);
+    }
+  });
+  STATE.cityFilter=ciudad; saveState(STATE);
+}
+
+// INIT
+renderDays();
+renderChecklist();
+renderHotels();
+renderRunning();
+renderApps();
+renderTracker();
+renderRutas();
+if(STATE.activeTab)switchTab(STATE.activeTab);
+if(STATE.cityFilter && STATE.cityFilter !== 'todas'){
+  const btn = [...document.querySelectorAll('.city-btn')].find(b=>b.textContent.includes(STATE.cityFilter));
+  if(btn){ btn.click(); }
+}
+</script>
+</body>
+</html>
